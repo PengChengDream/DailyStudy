@@ -50,9 +50,6 @@ jobs:
           --overwrite
           --readme-path README.md
 
-      - name: Generate weekly Zhihu draft on Sunday
-        run: python scripts/generate_weekly_zhihu.py --date "${{ steps.date.outputs.date }}" --if-sunday
-
       - name: Validate daily output
         run: python scripts/validate_plan.py --start-date "${{ steps.date.outputs.date }}" --days 1
 
@@ -61,7 +58,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add README.md history weekly logs question_bank
+          git add README.md history logs question_bank
           if git diff --cached --quiet; then
             echo "No generated changes to commit."
           else

@@ -232,12 +232,18 @@ def render_details(answer: str) -> str:
 
 
 def render_standard_question(index: int, label: str, item: dict[str, Any], include_answers: bool) -> str:
+    source = item.get("source", {})
     lines = [
         f"## {index}. {label}：{item['title']}",
         "",
         f"- 题目：{item['question']}",
         f"- 考察点：{markdown_list(item.get('points', []))}",
     ]
+    if label == "近 7 天新技术" and source.get("url"):
+        source_line = f"- 公众号链接：[{source.get('title', 'source')}]({source['url']})"
+        if source.get("published_at"):
+            source_line += f"（{source['published_at']}）"
+        lines.append(source_line)
     if include_answers:
         lines.extend(["", render_details(item.get("answer", "暂无参考答案。"))])
     return "\n".join(lines).strip()
@@ -299,7 +305,7 @@ def build_daily(
     log_dir: Path,
     strict_new_tech: bool = False,
     offline_new_tech: bool = False,
-) -> tuple[str, str, dict[str, Any]]:
+) -> tuple[str, dict[str, Any]]:
     month = month_key(target_day)
     month_dir = bank_root / month
     if not month_dir.exists():
@@ -321,22 +327,7 @@ def build_daily(
     coding_type = "ml" if target_day.toordinal() % 2 else "leetcode"
     coding_item = select_item(coding[coding_type], used_ids, f"{day_salt}:{coding_type}")
     hook = iq_item.get("hook") or hot_items[0].get("hook") or f"为什么“{iq_item['title']}”会让直觉先输一次？"
-    answer_file_for_link = daily_dir / f"{target_day.isoformat()}-answers.md"
-    try:
-        answer_file_for_link = answer_file_for_link.relative_to(PROJECT_ROOT)
-    except ValueError:
-        pass
-    answer_url = f"https://github.com/PengChengDream/DailyStudy/blob/main/{answer_file_for_link.as_posix()}"
-    question_sections = [
-        f"# {hook}\n\n日期：{target_day.isoformat()}\n\n答案版：[{target_day.isoformat()}-answers.md]({answer_url})\n",
-        render_standard_question(1, "智商题", iq_item, include_answers=False),
-        render_standard_question(2, "经典 ML/DL", classic_item, include_answers=False),
-        render_standard_question(3, "热门技术", hot_items[0], include_answers=False),
-        render_standard_question(4, "热门技术", hot_items[1], include_answers=False),
-        render_standard_question(5, "近 7 天新技术", new_tech_item, include_answers=False),
-        render_coding_question(6, coding_item, coding_type, include_answers=False),
-    ]
-    answer_sections = [
+    sections = [
         f"# {hook}\n\n日期：{target_day.isoformat()}\n",
         render_standard_question(1, "智商题", iq_item, include_answers=True),
         render_standard_question(2, "经典 ML/DL", classic_item, include_answers=True),
@@ -345,8 +336,7 @@ def build_daily(
         render_standard_question(5, "近 7 天新技术", new_tech_item, include_answers=True),
         render_coding_question(6, coding_item, coding_type, include_answers=True),
     ]
-    question_content = "\n\n".join(question_sections) + "\n"
-    answer_content = "\n\n".join(answer_sections) + "\n"
+    content = "\n\n".join(sections) + "\n"
 
     questions = [
         {"slot": 1, "type": "iq", **log_item(iq_item)},
@@ -357,7 +347,6 @@ def build_daily(
         {"slot": 6, "type": coding_type, **log_item(coding_item)},
     ]
     daily_path = daily_dir / f"{target_day.isoformat()}.md"
-    answer_path = daily_dir / f"{target_day.isoformat()}-answers.md"
     try:
         daily_file = daily_path.relative_to(PROJECT_ROOT).as_posix()
     except ValueError:
@@ -370,16 +359,13 @@ def build_daily(
         "date": target_day.isoformat(),
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "daily_file": daily_file,
-        "answer_file": answer_path.relative_to(PROJECT_ROOT).as_posix()
-        if answer_path.is_relative_to(PROJECT_ROOT)
-        else answer_path.as_posix(),
         "month_bank": month_bank,
         "iso_week": iso_week_key(target_day),
         "coding_rotation": coding_type,
         "questions": questions,
         "next_actions": infer_next_actions(month_dir, coding_type, new_tech_item),
     }
-    return question_content, answer_content, log_row
+    return content, log_row
 
 
 def log_item(item: dict[str, Any]) -> dict[str, Any]:
@@ -428,16 +414,13 @@ def main() -> None:
     daily_dir = project_path(args.daily_dir)
     log_dir = project_path(args.log_dir)
     daily_path = daily_dir / f"{target_day.isoformat()}.md"
-    answer_path = daily_dir / f"{target_day.isoformat()}-answers.md"
     log_path = log_dir / f"{target_day.isoformat()}.jsonl"
     if daily_path.exists() and not args.overwrite:
         raise FileExistsError(f"{daily_path} exists. Use --overwrite to regenerate it.")
-    if answer_path.exists() and not args.overwrite:
-        raise FileExistsError(f"{answer_path} exists. Use --overwrite to regenerate it.")
     if args.overwrite and log_path.exists():
         log_path.unlink()
 
-    question_content, answer_content, log_row = build_daily(
+    content, log_row = build_daily(
         target_day=target_day,
         bank_root=bank_root,
         daily_dir=daily_dir,
@@ -446,11 +429,10 @@ def main() -> None:
         offline_new_tech=args.offline_new_tech,
     )
     daily_path.parent.mkdir(parents=True, exist_ok=True)
-    daily_path.write_text(question_content, encoding="utf-8")
-    answer_path.write_text(answer_content, encoding="utf-8")
+    daily_path.write_text(content, encoding="utf-8")
     if args.readme_path:
         readme_path = project_path(args.readme_path)
-        readme_path.write_text(question_content, encoding="utf-8")
+        readme_path.write_text(content, encoding="utf-8")
     append_jsonl(log_path, log_row)
     print(f"Generated {daily_path.relative_to(PROJECT_ROOT)}")
 

@@ -3,23 +3,21 @@
 ## 每日发布
 
 - GitHub Actions 每天北京时间 08:00 运行 `.github/workflows/daily-ai-questions.yml`。
-- 生成 `history/YYYY-MM-DD.md` 题目版和 `history/YYYY-MM-DD-answers.md` 题目+答案版，并用题目版覆盖根目录 `README.md`，所以仓库首页会直接显示当天题目。
+- 生成 `history/YYYY-MM-DD.md` 题目+答案版，并用同一份内容覆盖根目录 `README.md`，所以仓库首页会直接显示当天完整内容。
 - 同时写入 `logs/YYYY-MM-DD.jsonl`，记录题目 id、来源、轮换状态和下一步建议。
-- 周日会额外生成 `weekly/YYYY-WW-zhihu-draft.md`，作为手动发布知乎的候选稿。
 
 ## 月度题库
 
 - 每月题库位于 `question_bank/YYYY-MM/`。
 - 每月 1 日北京时间 09:00 运行 `.github/workflows/monthly-question-bank.yml`，创建或刷新当月题库候选来源。
 - 自动刷新只保存来源链接和候选信息；真正入库的题目仍应改写后写入 JSON，避免复制面经原文或平台题面。
-- 当前每日题目不再包含趣味短文。普通问题不显示提示和来源；编程题保留对应题目的 LeetCode 或 Deep-ML problem 链接。题目版顶部会链接到当天 `history/YYYY-MM-DD-answers.md`。
+- 当前每日题目不再包含趣味短文。普通问题不显示提示和来源；编程题保留对应题目的 LeetCode 或 Deep-ML problem 链接。`README.md` 与 `history/YYYY-MM-DD.md` 内容一致，均包含答案。
 
 ## 本地命令
 
 ```powershell
 python scripts/build_monthly_bank.py --month 2026-05 --overwrite
 python scripts/generate_daily.py --date 2026-05-29 --daily-dir history --offline-new-tech --overwrite --readme-path README.md
-python scripts/generate_weekly_zhihu.py --date 2026-05-31
 python scripts/validate_plan.py --start-date 2026-05-29 --days 7
 ```
 

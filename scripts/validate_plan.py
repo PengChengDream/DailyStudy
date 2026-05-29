@@ -39,7 +39,7 @@ def validate_daily_sample(start_date: str, days: int, bank_root: Path, log_dir: 
     previous_coding = None
     for offset in range(days):
         day = start + timedelta(days=offset)
-        question_content, answer_content, log_row = build_daily(
+        content, log_row = build_daily(
             target_day=day,
             bank_root=bank_root,
             daily_dir=Path("daily-preview"),
@@ -53,12 +53,10 @@ def validate_daily_sample(start_date: str, days: int, bank_root: Path, log_dir: 
         if previous_coding:
             assert_true(previous_coding != questions[5]["type"], "Coding questions must alternate daily.")
         previous_coding = questions[5]["type"]
-        assert_true(question_content.startswith("# "), "Question file must start with a hook heading.")
-        assert_true(f"日期：{day.isoformat()}" in question_content, "Question file must include the date after hook.")
-        assert_true(f"{day.isoformat()}-answers.md" in question_content, "Question file must link to its answer file.")
-        assert_true("<summary>参考答案</summary>" not in question_content, "Question file must not include answers.")
-        assert_true("<summary>参考答案</summary>" in answer_content, "Answer file must include answers.")
-        assert_true("趣味短文" not in question_content, "Question file should not include fun essay.")
+        assert_true(content.startswith("# "), "Daily file must start with a hook heading.")
+        assert_true(f"日期：{day.isoformat()}" in content, "Daily file must include the date after hook.")
+        assert_true("<summary>参考答案</summary>" in content, "Daily file must include answers.")
+        assert_true("趣味短文" not in content, "Daily file should not include fun essay.")
 
 
 def main() -> None:

@@ -2,14 +2,12 @@
 
 ## Objective
 
-This repository publishes one daily AI interview practice set to GitHub. The homepage `README.md` must always mirror the current day's question-only file. The answer file is stored separately.
+This repository publishes one daily AI interview practice set to GitHub. The homepage `README.md` must always mirror the current day's full question-and-answer file.
 
 Daily outputs:
 
-- `history/YYYY-MM-DD.md`: question-only version, copied to `README.md`.
-- `history/YYYY-MM-DD-answers.md`: questions plus reference answers.
+- `history/YYYY-MM-DD.md`: questions plus reference answers, copied to `README.md`.
 - `logs/YYYY-MM-DD.jsonl`: machine-readable generation log.
-- `weekly/YYYY-WW-zhihu-draft.md`: weekly hand-picked Zhihu draft candidates.
 
 ## Daily Schedule
 
@@ -26,14 +24,13 @@ The normal daily command is:
 ```bash
 python scripts/build_monthly_bank.py --month "$YYYY_MM" --fetch-dynamic
 python scripts/generate_daily.py --date "$YYYY_MM_DD" --daily-dir history --strict-new-tech --overwrite --readme-path README.md
-python scripts/generate_weekly_zhihu.py --date "$YYYY_MM_DD" --if-sunday
 python scripts/validate_plan.py --start-date "$YYYY_MM_DD" --days 1
 ```
 
 After generation, commit and push:
 
 ```bash
-git add README.md history weekly logs question_bank
+git add README.md history logs question_bank
 git commit -m "chore: daily AI questions $YYYY_MM_DD"
 git push
 ```
@@ -57,7 +54,7 @@ AI-assisted tasks:
 - Extract one "recent technology" interview question from public Chinese AI media, prioritizing 量子位 and 机器之心, within the last 7 days.
 - Rewrite public big-tech interview experiences and discussions into original, non-infringing interview questions.
 - Generate concise reference answers, follow-up questions, and knowledge points.
-- Judge whether a question is duplicated, stale, too easy, too broad, or suitable for weekly Zhihu selection.
+- Judge whether a question is duplicated, stale, too easy, or too broad.
 - During monthly refresh, expand `question_bank/YYYY-MM/`, classify by topic, remove duplicates, and keep difficulty balanced.
 
 Rule-based tasks:
@@ -67,7 +64,6 @@ Rule-based tasks:
 - Generate Markdown files.
 - Write JSONL logs.
 - Update `README.md`.
-- Generate weekly draft files.
 
 ## Log-Driven Workflow
 
@@ -89,7 +85,6 @@ Use the logs to decide:
 - Which topics have appeared too often.
 - Which banks are running low on unused questions.
 - Whether LeetCode/Deep-ML rotation is intact.
-- Which questions deserve `zhihu_candidate: true`.
 - Whether the next monthly refresh should emphasize ML/DL basics, LLM/RAG/Agent, AI infra, multimodal, recommender systems, or coding.
 
 ## Recent Technology Question Rules
@@ -103,8 +98,9 @@ The recent technology item must:
 
 - Be published within 7 days of the target date.
 - Include title, URL, and `published_at`.
+- Prefer the original WeChat official-account article URL when it is available and stable. If the WeChat URL cannot be verified, use the public article page and name the source as the official account, for example `量子位公众号 QbitAI：...`.
 - Be rewritten as an interview question, not copied as a news paragraph.
-- Include `points`, `hint`, `answer`, and `zhihu_candidate`.
+- Include `points`, `hint`, and `answer`.
 - Prefer technology judgment questions over simple news recall.
 
 Allowed manual format in `question_bank/YYYY-MM/new_tech_manual.json`:
@@ -122,8 +118,7 @@ Allowed manual format in `question_bank/YYYY-MM/new_tech_manual.json`:
     "title": "source title",
     "url": "https://...",
     "published_at": "YYYY-MM-DD"
-  },
-  "zhihu_candidate": true
+  }
 }
 ```
 
@@ -147,7 +142,6 @@ For each new question, write original content:
 - `answer`
 - `source.title`
 - `source.url`
-- `zhihu_candidate`
 
 Keep answers concise and interview-focused.
 
@@ -174,7 +168,6 @@ Before adding a question:
 - Search existing monthly and base banks for similar titles and points.
 - Avoid repeating the same concept more than twice in a week.
 - Prefer questions with a concrete interview angle.
-- Mark `zhihu_candidate: true` only if the question can spark discussion and the answer teaches a reusable reasoning pattern.
 
 ## Copyright Boundaries
 
@@ -197,7 +190,7 @@ Allowed:
 Before committing generated content, run:
 
 ```bash
-python -m py_compile scripts/common.py scripts/generate_daily.py scripts/build_monthly_bank.py scripts/generate_weekly_zhihu.py scripts/validate_plan.py
+python -m py_compile scripts/common.py scripts/generate_daily.py scripts/build_monthly_bank.py scripts/validate_plan.py
 python scripts/validate_plan.py --start-date "$YYYY_MM_DD" --days 1
 ```
 

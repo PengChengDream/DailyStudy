@@ -1,6 +1,6 @@
 {
   "month": "2026-05",
-  "refreshed_at": "2026-05-29T11:05:12.708880+00:00",
+  "refreshed_at": "2026-05-29T12:15:21.243799+00:00",
   "groups": {
     "中文 AI 科技媒体": [
       {
@@ -81,12 +81,15 @@
         "url": "https://www.tencent.com/en-us/articles/2202320.html",
         "note": "腾讯混元公开技术动态。"
       }
-    ]
+    ],
+    "GitHub 动态候选": []
   },
   "notes": [
     "每月刷新只收集公开链接、标题、摘要和方向标签，不复制完整面经或题面。",
     "LeetCode 只保存题号、链接、自写摘要和解题思路，不保存完整题面。",
     "牛客、Glassdoor、Reddit、LeetCode Discuss 等内容只作为选题线索，入库题目必须改写。"
   ],
-  "errors": []
+  "errors": [
+    "GitHub topic fetch failed: <urlopen error [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。>"
+  ]
 }

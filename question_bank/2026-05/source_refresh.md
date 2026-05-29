@@ -1,8 +1,8 @@
 # 2026-05 月度题库来源刷新
 
-- 刷新时间：2026-05-29T11:05:12.708880+00:00
+- 刷新时间：2026-05-29T12:15:21.243799+00:00
 - 复制/更新题库文件：无，已有文件保持不变
-- 动态抓取错误：无
+- 动态抓取错误：GitHub topic fetch failed: <urlopen error [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。>
 
 ## 使用原则
 
@@ -40,3 +40,5 @@
 - [ByteDance Seed](https://seed.bytedance.com/research?view_from=homepage_tab)：字节 Seed 研究与模型动态。
 - [Qwen](https://qwenlm.github.io/)：通义千问模型和技术报告。
 - [Tencent Hunyuan](https://www.tencent.com/en-us/articles/2202320.html)：腾讯混元公开技术动态。
+
+### GitHub 动态候选
