@@ -1,0 +1,57 @@
+name: Monthly Question Bank Refresh
+
+on:
+  schedule:
+    # 09:00 Asia/Shanghai on the first day of every month.
+    - cron: "0 1 1 * *"
+  workflow_dispatch:
+    inputs:
+      target_month:
+        description: "Optional target month, YYYY-MM"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Resolve Beijing month
+        id: month
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.target_month }}" ]; then
+            TARGET_MONTH="${{ github.event.inputs.target_month }}"
+          else
+            TARGET_MONTH="$(TZ=Asia/Shanghai date +%Y-%m)"
+          fi
+          echo "month=${TARGET_MONTH}" >> "$GITHUB_OUTPUT"
+
+      - name: Refresh source candidates
+        run: python scripts/build_monthly_bank.py --month "${{ steps.month.outputs.month }}" --fetch-dynamic
+
+      - name: Validate monthly bank
+        run: python scripts/validate_plan.py --start-date "${{ steps.month.outputs.month }}-01" --days 1
+
+      - name: Commit monthly bank
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add question_bank
+          if git diff --cached --quiet; then
+            echo "No monthly bank changes to commit."
+          else
+            git commit -m "chore: refresh question bank ${{ steps.month.outputs.month }}"
+            git push
+          fi

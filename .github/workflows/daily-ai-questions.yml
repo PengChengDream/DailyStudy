@@ -1,0 +1,70 @@
+name: Daily AI Interview Questions
+
+on:
+  schedule:
+    # 08:00 Asia/Shanghai.
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+    inputs:
+      target_date:
+        description: "Optional target date, YYYY-MM-DD"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Resolve Beijing date
+        id: date
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.target_date }}" ]; then
+            TARGET_DATE="${{ github.event.inputs.target_date }}"
+          else
+            TARGET_DATE="$(TZ=Asia/Shanghai date +%F)"
+          fi
+          echo "date=${TARGET_DATE}" >> "$GITHUB_OUTPUT"
+          echo "month=${TARGET_DATE:0:7}" >> "$GITHUB_OUTPUT"
+
+      - name: Ensure monthly question bank
+        run: python scripts/build_monthly_bank.py --month "${{ steps.date.outputs.month }}" --fetch-dynamic
+
+      - name: Generate daily file and homepage
+        run: >
+          python scripts/generate_daily.py
+          --date "${{ steps.date.outputs.date }}"
+          --daily-dir history
+          --strict-new-tech
+          --overwrite
+          --readme-path README.md
+
+      - name: Generate weekly Zhihu draft on Sunday
+        run: python scripts/generate_weekly_zhihu.py --date "${{ steps.date.outputs.date }}" --if-sunday
+
+      - name: Validate daily output
+        run: python scripts/validate_plan.py --start-date "${{ steps.date.outputs.date }}" --days 1
+
+      - name: Commit generated content
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md history weekly logs question_bank
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+          else
+            git commit -m "chore: daily AI questions ${{ steps.date.outputs.date }}"
+            git push
+          fi

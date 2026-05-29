@@ -1,0 +1,79 @@
+[
+  {
+    "id": "shishuo-chen-taiqiu",
+    "title": "趣味短文：陈太丘与友期",
+    "article_title": "陈太丘与友期",
+    "excerpt": "日中不至",
+    "source_title": "《世说新语·方正》",
+    "url": "https://zh.wikisource.org/wiki/%E4%B8%96%E8%AA%AA%E6%96%B0%E8%AA%9E/%E6%96%B9%E6%AD%A3",
+    "original_text": "陈太丘与友期行，期日中。过中不至，太丘舍去，去后乃至。",
+    "reflection_question": "这则故事里，真正的冲突是迟到，还是迟到后如何解释责任？",
+    "answer": "表面冲突是迟到，核心冲突是契约意识。迟到已经破坏约定，事后如果只强调自己的理由，而不承认对他人时间的影响，就会让小失误变成信任问题。"
+  },
+  {
+    "id": "shishuo-wangrong-li",
+    "title": "趣味短文：王戎识李",
+    "article_title": "王戎识李",
+    "excerpt": "此必苦李",
+    "source_title": "《世说新语·雅量》",
+    "url": "https://zh.wikisource.org/wiki/%E4%B8%96%E8%AA%AA%E6%96%B0%E8%AA%9E/%E9%9B%85%E9%87%8F",
+    "original_text": "王戎七岁，尝与诸小儿游。看道边李树多子折枝，诸儿竞走取之，唯戎不动。",
+    "reflection_question": "王戎为什么不取李子？这和算法里利用反常现象做判断有什么相似之处？",
+    "answer": "路边李子多到压弯树枝却没人摘，说明它大概率不好吃。这里不是靠更多信息，而是利用反常现象反推隐藏原因。算法建模中，异常缺失、无人点击、极端分布，也常常比显性特征更有解释力。"
+  },
+  {
+    "id": "shishuo-guan-ning",
+    "title": "趣味短文：管宁割席",
+    "article_title": "管宁割席",
+    "excerpt": "子非吾友",
+    "source_title": "《世说新语·德行》",
+    "url": "https://zh.wikisource.org/wiki/%E4%B8%96%E8%AA%AA%E6%96%B0%E8%AA%9E/%E5%BE%B7%E8%A1%8C",
+    "original_text": "管宁、华歆共园中锄菜，见地有片金。管挥锄与瓦石不异，华捉而掷去之。",
+    "reflection_question": "管宁看到的不是金子本身，而是什么信号？",
+    "answer": "他看到的是价值排序的差异。华歆最终也把金子扔掉，但先捡起来的动作已经暴露了注意力被什么吸引。很多协作分歧不是能力差异，而是默认目标函数不同。"
+  },
+  {
+    "id": "shishuo-xie-daoyun",
+    "title": "趣味短文：咏雪",
+    "article_title": "咏雪",
+    "excerpt": "未若柳絮",
+    "source_title": "《世说新语·言语》",
+    "url": "https://zh.wikisource.org/wiki/%E4%B8%96%E8%AA%AA%E6%96%B0%E8%AA%9E/%E8%A8%80%E8%AA%9E",
+    "original_text": "谢太傅寒雪日内集，与儿女讲论文义。俄而雪骤，公欣然曰：白雪纷纷何所似？",
+    "reflection_question": "为什么好的类比不是找相似外形，而是找更高层的相似结构？",
+    "answer": "外形相似只能让人看见表面，结构相似能让人理解动态关系。用柳絮比雪，不只是白和轻，还包含飘动、分散、随风的状态。技术表达里，好类比也应该帮助别人理解机制，而不是制造漂亮说法。"
+  },
+  {
+    "id": "shishuo-kong-rong",
+    "title": "趣味短文：小时了了",
+    "article_title": "小时了了",
+    "excerpt": "大未必佳",
+    "source_title": "《世说新语·言语》",
+    "url": "https://zh.wikisource.org/wiki/%E4%B8%96%E8%AA%AA%E6%96%B0%E8%AA%9E/%E8%A8%80%E8%AA%9E",
+    "original_text": "孔融十岁，随父到洛。时李元礼有盛名，为司隶校尉。",
+    "reflection_question": "小时候聪明和长期厉害之间，缺的通常是什么？",
+    "answer": "短期聪明更多体现反应速度和语言机锋，长期厉害还需要稳定训练、判断力、抗挫折和持续产出。面试里也是如此，一次灵光回答不等于长期工程能力。"
+  },
+  {
+    "id": "shishuo-zhi-hetang",
+    "title": "趣味短文：鹤立鸡群",
+    "article_title": "鹤立鸡群",
+    "excerpt": "如野鹤之在鸡群",
+    "source_title": "《世说新语·容止》",
+    "url": "https://zh.wikisource.org/wiki/%E4%B8%96%E8%AA%AA%E6%96%B0%E8%AA%9E/%E5%AE%B9%E6%AD%A2",
+    "original_text": "有人语王戎曰：嵇延祖卓卓如野鹤之在鸡群。",
+    "reflection_question": "一个人在人群中显眼，可能来自能力，也可能来自什么？",
+    "answer": "显眼可能来自能力差异，也可能来自场景错配、表达风格、资源位置或他人期待。判断一个人是否真的强，不能只看他是否突出，还要看突出部分能否在真实任务中转化为结果。"
+  },
+  {
+    "id": "shishuo-xunju",
+    "title": "趣味短文：一往情深",
+    "article_title": "一往情深",
+    "excerpt": "一往而深",
+    "source_title": "《世说新语·任诞》",
+    "url": "https://zh.wikisource.org/wiki/%E4%B8%96%E8%AA%AA%E6%96%B0%E8%AA%9E/%E4%BB%BB%E8%AA%95",
+    "original_text": "桓子野每闻清歌，辄唤奈何。谢公闻之曰：子野可谓一往有深情。",
+    "reflection_question": "为什么一个人对小事的反应，常常比他对大道理的表态更真实？",
+    "answer": "大道理容易被修饰，小反应更接近真实偏好。技术学习也一样，嘴上说重视基础不难，遇到 bug 时是否愿意追到原理，才更能说明真实投入。"
+  }
+]

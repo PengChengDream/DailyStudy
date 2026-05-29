@@ -1,0 +1,197 @@
+[
+  {
+    "id": "hot-rag-failure",
+    "title": "RAG 为什么召回到了文档仍然可能答错？",
+    "question": "一个 RAG 系统 top-k 召回里包含正确文档，但模型最终回答错误。你会从哪些环节排查？",
+    "points": ["RAG", "检索评估", "上下文利用"],
+    "hint": "把问题拆成 query 改写、召回、重排、上下文组织、生成忠实性和评测。",
+    "answer": "先看召回文档是否真的包含可回答证据，以及证据位置是否被截断。再看重排是否把关键片段放到靠前位置，prompt 是否要求引用证据，chunk 是否过大或过小导致语义断裂。还要检查问题是否需要多跳推理、时间过滤或权限过滤。评测上应分开看 retrieval recall、context precision、faithfulness 和 answer correctness。",
+    "source": {
+      "title": "RAG overview",
+      "url": "https://arxiv.org/abs/2005.11401"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-moe-routing",
+    "title": "MoE 为什么能省算力又容易训练不稳定？",
+    "question": "解释 MoE 中 top-k router、负载均衡损失和 expert collapse。为什么 MoE 推理 FLOPs 低但系统复杂度高？",
+    "points": ["MoE", "稀疏激活", "分布式训练"],
+    "hint": "参数总量和每个 token 激活参数量不是一回事。",
+    "answer": "MoE 让每个 token 只激活少数 expert，因此在相同推理 FLOPs 下扩大总参数量。router 学得不好时，token 会集中到少数 expert，造成 expert collapse 和负载不均，所以需要负载均衡损失、容量因子和路由正则。系统上 expert 并行会引入 all-to-all 通信、显存碎片和尾延迟，因此省计算不等于系统简单。",
+    "source": {
+      "title": "Switch Transformers",
+      "url": "https://arxiv.org/abs/2101.03961"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-llm-eval",
+    "title": "为什么大模型评测不能只看一个榜单分数？",
+    "question": "如果两个模型在公开 benchmark 上分数接近，你会如何设计更可靠的业务评测？",
+    "points": ["LLM 评测", "数据泄漏", "业务指标"],
+    "hint": "区分通用能力、场景能力、稳定性、安全性和成本。",
+    "answer": "榜单可能受数据污染、prompt 模板、采样参数和题型偏差影响。业务评测应先定义真实任务分布，构建私有测试集和困难样本集，区分自动指标、人评和线上指标。还要测拒答、幻觉、格式遵循、长上下文、工具调用、延迟、成本和安全边界。分数接近时，稳定性和可运营成本常常比平均分更重要。",
+    "source": {
+      "title": "HELM",
+      "url": "https://crfm.stanford.edu/helm/latest/"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-agent-memory",
+    "title": "Agent 的 memory 应该存什么，不应该存什么？",
+    "question": "设计一个面向工作流的 Agent，长期记忆、短期上下文和外部知识库分别应该承担什么职责？",
+    "points": ["Agent", "Memory", "隐私"],
+    "hint": "把状态、偏好、事实知识和执行轨迹分开。",
+    "answer": "短期上下文保存当前任务目标、最近对话和工具返回；长期记忆保存用户稳定偏好、项目约束和可复用经验；外部知识库保存可检索事实和文档。不要把敏感信息、临时错误状态或未经验证的模型猜测直接写入长期记忆。工程上需要记忆写入门控、过期机制、来源追踪、用户可编辑和权限隔离。",
+    "source": {
+      "title": "Generative Agents",
+      "url": "https://arxiv.org/abs/2304.03442"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-function-calling",
+    "title": "工具调用为什么不是把 API 文档塞给模型就完了？",
+    "question": "LLM function calling 系统里，schema 设计、参数校验、错误恢复和权限控制分别为什么重要？",
+    "points": ["Tool use", "Function calling", "可靠性"],
+    "hint": "模型负责规划和填参，但系统必须负责约束和执行安全。",
+    "answer": "清晰 schema 能降低模型填错参数的概率；参数校验防止无效或危险调用进入后端；错误恢复让模型能根据结构化错误重试；权限控制避免模型越权访问或执行高风险操作。生产系统不能只信任模型输出，应有 allowlist、dry-run、审计日志和用户确认机制。",
+    "source": {
+      "title": "OpenAI function calling guide",
+      "url": "https://platform.openai.com/docs/guides/function-calling"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-kv-cache",
+    "title": "KV Cache 为什么能加速推理，却会吃掉大量显存？",
+    "question": "解释自回归推理中 KV Cache 的作用、显存规模和长上下文场景的优化方向。",
+    "points": ["推理优化", "Transformer", "显存"],
+    "hint": "每生成一个 token，新 token 只需要和历史 K/V 做 attention，不必重复算历史 token 的 K/V。",
+    "answer": "KV Cache 保存历史 token 在每层 attention 中的 key/value，生成下一个 token 时可复用历史结果，避免重复计算。但缓存大小随 batch、层数、头数、上下文长度和 hidden size 线性增长，长上下文会显著占显存。常见优化包括分页 KV cache、量化 KV、滑动窗口 attention、prefix cache 和 speculative decoding。",
+    "source": {
+      "title": "vLLM PagedAttention",
+      "url": "https://arxiv.org/abs/2309.06180"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-speculative-decoding",
+    "title": "投机解码为什么能加速但不改变输出分布？",
+    "question": "说明 speculative decoding 的基本流程：小模型草拟、大模型验证。为什么它理论上可以保持目标模型分布？",
+    "points": ["LLM 推理", "解码加速", "采样"],
+    "hint": "关键不在小模型是否完全正确，而在接受/拒绝机制修正分布。",
+    "answer": "草稿模型一次生成多个候选 token，目标模型并行计算这些 token 的概率并逐个验证。若候选符合接受准则就一次性前进多个 token，否则按修正分布采样。只要接受/拒绝规则正确，最终采样分布仍等价于目标模型。实际收益取决于草稿模型速度、命中率和目标模型并行验证效率。",
+    "source": {
+      "title": "Fast Inference from Transformers via Speculative Decoding",
+      "url": "https://arxiv.org/abs/2211.17192"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-multimodal-alignment",
+    "title": "多模态模型为什么需要视觉 token 和文本 token 对齐？",
+    "question": "视觉编码器接到 LLM 前，常见的 projector、Q-Former 或 cross-attention 分别在解决什么问题？",
+    "points": ["多模态", "表示对齐", "视觉语言模型"],
+    "hint": "视觉特征维度、token 数量和语义粒度通常不能直接被 LLM 消化。",
+    "answer": "视觉编码器输出的是图像 patch 或区域特征，维度和语义分布与文本 embedding 不同。projector 用简单映射把视觉特征投到 LLM 空间；Q-Former 用可学习 query 从视觉特征中抽取少量语义 token；cross-attention 则让文本生成过程中动态读取视觉信息。核心目标是控制 token 成本并让 LLM 能稳定利用视觉证据。",
+    "source": {
+      "title": "BLIP-2",
+      "url": "https://arxiv.org/abs/2301.12597"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-recsys-ranking",
+    "title": "推荐系统为什么要分召回、粗排、精排？",
+    "question": "从候选规模、特征复杂度和延迟约束解释推荐系统多阶段架构。每一层优化目标有什么不同？",
+    "points": ["推荐系统", "多阶段排序", "工程权衡"],
+    "hint": "越靠前候选越多，模型越要便宜；越靠后候选越少，模型越能复杂。",
+    "answer": "召回从海量物品中快速找几百到几千个相关候选，目标是高召回和低延迟；粗排进一步过滤，兼顾相关性和成本；精排使用更多特征和复杂模型优化点击、转化、时长等目标；重排再处理多样性、规则和业务约束。多阶段架构本质是在效果、延迟和成本之间分层折中。",
+    "source": {
+      "title": "Deep Neural Networks for YouTube Recommendations",
+      "url": "https://research.google/pubs/deep-neural-networks-for-youtube-recommendations/"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-ai-infra-serving",
+    "title": "LLM 服务为什么瓶颈经常不是算力峰值而是调度？",
+    "question": "在线 LLM 服务中，batching、prefill/decode 分离、队列调度和 SLA 会如何影响吞吐与延迟？",
+    "points": ["AI Infra", "在线推理", "调度"],
+    "hint": "prefill 更像大矩阵计算，decode 更像逐 token 小步生成。",
+    "answer": "动态 batching 可以提高 GPU 利用率，但等待凑 batch 会增加首 token 延迟。prefill 处理长 prompt，计算密集；decode 逐 token 生成，受内存带宽和 KV cache 影响更大。把 prefill/decode 分离、按长度分桶、限制最大输出和设置优先级队列，都能改善 SLA。优化目标不是单纯 tokens/s，而是在延迟约束下最大化稳定吞吐。",
+    "source": {
+      "title": "Orca serving paper",
+      "url": "https://www.usenix.org/conference/osdi22/presentation/yu"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-rlhf-dpo",
+    "title": "DPO 和 RLHF 的区别是什么？",
+    "question": "解释 RLHF 的奖励模型 + PPO 流程，以及 DPO 为什么可以绕过显式奖励模型训练和在线强化学习。",
+    "points": ["对齐", "偏好学习", "DPO"],
+    "hint": "DPO 把偏好数据直接转成一个分类式目标，并用参考模型约束偏移。",
+    "answer": "RLHF 通常先用偏好数据训练奖励模型，再用 PPO 优化策略，同时用 KL 约束不偏离参考模型。DPO 从 Bradley-Terry 偏好模型推导出直接优化偏好对的损失，不需要显式训练奖励模型，也不需要 PPO 采样循环。DPO 实现更简单稳定，但效果依赖偏好数据质量和参考模型选择。",
+    "source": {
+      "title": "Direct Preference Optimization",
+      "url": "https://arxiv.org/abs/2305.18290"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-long-context",
+    "title": "长上下文模型为什么不等于会用长上下文？",
+    "question": "模型支持 1M token 上下文后，为什么仍可能在 needle-in-a-haystack 或多证据推理中失败？",
+    "points": ["长上下文", "注意力", "评测"],
+    "hint": "可输入长度、可检索能力、可推理能力是三件事。",
+    "answer": "长上下文窗口只说明模型能接收长输入，不保证它能均匀关注、准确定位和组合远距离证据。失败可能来自位置偏置、注意力稀释、训练数据中长程任务不足、检索线索弱或 prompt 组织差。评测要区分简单定位、多跳引用、冲突证据处理和跨段推理，并关注成本和延迟。",
+    "source": {
+      "title": "Lost in the Middle",
+      "url": "https://arxiv.org/abs/2307.03172"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-data-centric-ai",
+    "title": "为什么数据质量经常比模型结构更影响落地？",
+    "question": "在业务 AI 项目中，标签噪声、分布漂移、数据泄漏和样本选择偏差分别会造成什么问题？",
+    "points": ["数据中心 AI", "数据治理", "泛化"],
+    "hint": "模型只能学习数据里可见且一致的信号。",
+    "answer": "标签噪声会让模型学习到错误边界；分布漂移导致离线效果无法迁移到线上；数据泄漏让验证集虚高；样本选择偏差让模型只适合被采集到的人群或场景。落地时应做数据审计、切分策略检查、困难样本回流、标签一致性评估和线上监控。很多改模型无效的问题，本质是数据闭环没有做好。",
+    "source": {
+      "title": "Data-Centric AI resource hub",
+      "url": "https://landing.ai/data-centric-ai/"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-embodied-ai",
+    "title": "具身智能为什么不能只靠语言模型规划？",
+    "question": "机器人任务中，高层语言规划、低层控制、环境感知和安全约束如何分工？",
+    "points": ["具身智能", "机器人", "规划控制"],
+    "hint": "语言模型擅长任务分解，但不直接解决连续控制和物理反馈。",
+    "answer": "LLM 可以把自然语言目标分解成子任务，但真实机器人还需要视觉/触觉感知、状态估计、轨迹规划、控制器和安全监控。环境会变化，动作有噪声，物体交互有物理约束，所以必须闭环执行。可靠系统通常把 LLM 放在高层规划和纠错位置，低层由专门策略、控制算法或模型预测控制处理。",
+    "source": {
+      "title": "SayCan",
+      "url": "https://say-can.github.io/"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "hot-safety-jailbreak",
+    "title": "越强的模型为什么仍会被 jailbreak？",
+    "question": "从训练目标、上下文服从、分布外 prompt 和安全策略组合解释 jailbreak 的根源。",
+    "points": ["AI Safety", "红队", "防护"],
+    "hint": "安全不是一个分类器就能解决，模型能力越强也越会执行复杂指令。",
+    "answer": "模型预训练和指令微调都在强化“理解并服从上下文”的能力，攻击 prompt 会利用角色扮演、编码、分步诱导或目标重写绕过安全边界。安全对齐通常只覆盖有限分布，遇到组合式分布外输入会失效。防护需要模型侧对齐、输入输出过滤、工具权限隔离、审计、红队测试和高风险动作确认共同工作。",
+    "source": {
+      "title": "OWASP Top 10 for LLM Applications",
+      "url": "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+    },
+    "zhihu_candidate": true
+  }
+]

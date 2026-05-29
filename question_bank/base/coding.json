@@ -1,0 +1,126 @@
+{
+  "leetcode": [
+    {
+      "id": "leetcode-1-two-sum",
+      "title": "Two Sum",
+      "leetcode_no": 1,
+      "difficulty": "Easy",
+      "tags": ["哈希表", "数组"],
+      "summary": "给定一个整数数组和目标值，找出两个不同下标，使对应元素之和等于目标值。",
+      "hint": "遍历时记录“还需要的数”或记录已见过的数到下标。",
+      "answer": "用哈希表存已经遍历过的值到下标。对当前值 x，检查 target-x 是否已出现；若出现，返回两个下标。时间复杂度 O(n)，空间复杂度 O(n)。",
+      "source": {
+        "title": "LeetCode 1",
+        "url": "https://leetcode.com/problems/two-sum/"
+      },
+      "zhihu_candidate": true
+    },
+    {
+      "id": "leetcode-53-maximum-subarray",
+      "title": "Maximum Subarray",
+      "leetcode_no": 53,
+      "difficulty": "Medium",
+      "tags": ["动态规划", "贪心", "数组"],
+      "summary": "给定整数数组，求一个连续子数组，使其元素和最大，并返回最大和。",
+      "hint": "思考以当前位置结尾的最优子数组，要么接上前面，要么从当前重新开始。",
+      "answer": "设 cur 为以当前位置结尾的最大子数组和，cur=max(x, cur+x)；全局答案 best=max(best, cur)。这就是 Kadane 算法，时间 O(n)，空间 O(1)。",
+      "source": {
+        "title": "LeetCode 53",
+        "url": "https://leetcode.com/problems/maximum-subarray/"
+      },
+      "zhihu_candidate": true
+    },
+    {
+      "id": "leetcode-141-linked-list-cycle",
+      "title": "Linked List Cycle",
+      "leetcode_no": 141,
+      "difficulty": "Easy",
+      "tags": ["快慢指针", "链表"],
+      "summary": "判断一个链表中是否存在环。",
+      "hint": "如果有环，快指针最终会追上慢指针；如果无环，快指针会先到空。",
+      "answer": "使用 Floyd 快慢指针：slow 每次走一步，fast 每次走两步。若二者相遇，则有环；若 fast 或 fast.next 为空，则无环。时间 O(n)，空间 O(1)。",
+      "source": {
+        "title": "LeetCode 141",
+        "url": "https://leetcode.com/problems/linked-list-cycle/"
+      },
+      "zhihu_candidate": false
+    },
+    {
+      "id": "leetcode-200-number-of-islands",
+      "title": "Number of Islands",
+      "leetcode_no": 200,
+      "difficulty": "Medium",
+      "tags": ["DFS", "BFS", "并查集", "网格"],
+      "summary": "给定由陆地和水组成的二维网格，统计互相连通的陆地区块数量。",
+      "hint": "每遇到一个未访问陆地，答案加一，并把与它连通的陆地全部标记掉。",
+      "answer": "遍历网格，遇到未访问陆地就启动 DFS/BFS，把上下左右连通陆地标记为已访问。每次启动搜索代表发现一个新岛屿。时间 O(mn)，空间取决于搜索栈或队列。",
+      "source": {
+        "title": "LeetCode 200",
+        "url": "https://leetcode.com/problems/number-of-islands/"
+      },
+      "zhihu_candidate": true
+    }
+  ],
+  "ml": [
+    {
+      "id": "ml-softmax-cross-entropy",
+      "title": "实现多分类交叉熵损失",
+      "interview_context": "深度学习基础面试中常见，用来考察数值稳定性和向量化。",
+      "function_signature": "softmax_cross_entropy(logits, labels)",
+      "prompt": "给定 logits，形状为 (n, c)，以及每个样本的类别下标 labels，返回平均交叉熵损失和 logits 梯度。",
+      "examples": ["logits=[[2,1,0]], labels=[0] -> loss≈0.4076, grad≈[[-0.3348,0.2447,0.0900]]"],
+      "constraints": "使用 NumPy；需要减去每行最大值保证稳定；参考解法 30 行以内。",
+      "reference_solution": "import numpy as np\n\n\ndef softmax_cross_entropy(logits, labels):\n    logits = np.asarray(logits, dtype=float)\n    labels = np.asarray(labels, dtype=int)\n    shifted = logits - logits.max(axis=1, keepdims=True)\n    exp = np.exp(shifted)\n    probs = exp / exp.sum(axis=1, keepdims=True)\n    n = logits.shape[0]\n    loss = -np.log(probs[np.arange(n), labels] + 1e-12).mean()\n    grad = probs.copy()\n    grad[np.arange(n), labels] -= 1\n    grad /= n\n    return loss, grad",
+      "source": {
+        "title": "Deep-ML 134: Multi-Class Cross-Entropy Loss",
+        "url": "https://www.deep-ml.com/problems/134"
+      },
+      "zhihu_candidate": true
+    },
+    {
+      "id": "ml-precision",
+      "title": "实现 Precision 指标",
+      "interview_context": "分类评估面试常见，用来考察混淆矩阵和指标边界条件。",
+      "function_signature": "precision(y_true, y_pred)",
+      "prompt": "给定 0/1 真实标签和预测标签，返回 precision = TP / (TP + FP)。如果没有预测正类，返回 0。",
+      "examples": ["y_true=[1,0,1,1], y_pred=[1,1,0,1] -> 2/3"],
+      "constraints": "不要调用 sklearn；参考解法 30 行以内。",
+      "reference_solution": "def precision(y_true, y_pred):\n    tp = 0\n    fp = 0\n    for true, pred in zip(y_true, y_pred):\n        if pred == 1 and true == 1:\n            tp += 1\n        elif pred == 1 and true == 0:\n            fp += 1\n    return tp / (tp + fp) if tp + fp else 0.0",
+      "source": {
+        "title": "Deep-ML 46: Calculate Precision Metric",
+        "url": "https://www.deep-ml.com/problems/46"
+      },
+      "zhihu_candidate": true
+    },
+    {
+      "id": "ml-kmeans-one-iteration",
+      "title": "实现 KMeans 的一次迭代",
+      "interview_context": "经典机器学习编程题，考察距离计算、聚类更新和空簇处理。",
+      "function_signature": "kmeans_step(X, centers)",
+      "prompt": "给定样本矩阵 X 和当前聚类中心 centers，完成一次 assign + update，并返回新中心和每个样本标签。",
+      "examples": ["X=[[0,0],[2,0],[10,0]], centers=[[0,0],[9,0]] -> labels=[0,0,1]"],
+      "constraints": "使用 NumPy；空簇保持原中心不变；参考解法 30 行以内。",
+      "reference_solution": "import numpy as np\n\n\ndef kmeans_step(X, centers):\n    X = np.asarray(X, dtype=float)\n    centers = np.asarray(centers, dtype=float)\n    dist = ((X[:, None, :] - centers[None, :, :]) ** 2).sum(axis=2)\n    labels = dist.argmin(axis=1)\n    new_centers = centers.copy()\n    for k in range(len(centers)):\n        points = X[labels == k]\n        if len(points):\n            new_centers[k] = points.mean(axis=0)\n    return new_centers, labels",
+      "source": {
+        "title": "Deep-ML 17: K-Means Clustering",
+        "url": "https://www.deep-ml.com/problems/17"
+      },
+      "zhihu_candidate": false
+    },
+    {
+      "id": "ml-dice-score",
+      "title": "实现 Dice Score",
+      "interview_context": "医学影像、分割和多模态视觉面试常见，考察集合重叠指标。",
+      "function_signature": "dice_score(y_true, y_pred)",
+      "prompt": "给定两个 0/1 mask，返回 Dice Score = 2 * intersection / (|A| + |B|)。如果两个 mask 都为空，返回 1。",
+      "examples": ["y_true=[1,1,0,0], y_pred=[1,0,1,0] -> 0.5"],
+      "constraints": "可以使用 Python 或 NumPy；参考解法 30 行以内。",
+      "reference_solution": "def dice_score(y_true, y_pred):\n    intersection = 0\n    total_true = 0\n    total_pred = 0\n    for true, pred in zip(y_true, y_pred):\n        total_true += int(true == 1)\n        total_pred += int(pred == 1)\n        intersection += int(true == 1 and pred == 1)\n    denom = total_true + total_pred\n    return 1.0 if denom == 0 else 2 * intersection / denom",
+      "source": {
+        "title": "Deep-ML 73: Dice Score Calculation",
+        "url": "https://www.deep-ml.com/problems/73"
+      },
+      "zhihu_candidate": true
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+[
+  {
+    "id": "mldl-bias-variance",
+    "title": "偏差-方差分解为什么能解释过拟合？",
+    "question": "从误差来源角度解释偏差、方差和不可约噪声。为什么模型复杂度上升时，训练误差下降但测试误差可能上升？",
+    "points": ["泛化误差", "模型复杂度", "过拟合"],
+    "hint": "把模型对不同训练集的预测看成随机变量，讨论均值偏离真实函数和围绕均值波动。",
+    "answer": "偏差衡量平均预测和真实函数的系统性差距，方差衡量模型对训练数据扰动的敏感性，不可约噪声来自数据本身。简单模型偏差高、方差低，复杂模型偏差低、方差高。模型复杂度上升时更容易贴合训练集，训练误差下降；但如果方差增长超过偏差下降，测试误差就会上升。",
+    "source": {
+      "title": "Elements of Statistical Learning",
+      "url": "https://hastie.su.domains/ElemStatLearn/"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "mldl-l1-l2",
+    "title": "L1 和 L2 正则为什么表现不同？",
+    "question": "比较 L1、L2 正则对参数、特征选择和优化过程的影响。为什么 L1 更容易产生稀疏解？",
+    "points": ["正则化", "稀疏性", "几何解释"],
+    "hint": "从约束区域形状和损失等高线相切位置解释。",
+    "answer": "L2 惩罚平方和，会连续缩小参数，通常让权重更平滑；L1 惩罚绝对值和，其约束区域有尖角，损失等高线更容易在坐标轴尖角处相切，使部分参数精确为 0，因此有特征选择效果。优化上 L1 在 0 点不可导，常用次梯度、坐标下降或近端方法处理。",
+    "source": {
+      "title": "Stanford CS229 notes",
+      "url": "https://cs229.stanford.edu/"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "mldl-batchnorm-train-infer",
+    "title": "BatchNorm 训练和推理为什么不一样？",
+    "question": "解释 BatchNorm 在训练和推理阶段使用的均值、方差有什么不同，以及小 batch 为什么可能导致效果变差。",
+    "points": ["归一化", "训练推理一致性", "小 batch"],
+    "hint": "训练阶段统计来自当前 batch，推理阶段统计来自滑动平均。",
+    "answer": "训练时 BatchNorm 用当前 mini-batch 的均值和方差归一化，并更新 running mean/variance；推理时不能依赖单个样本或小 batch 的统计，使用训练期间累计的滑动平均。小 batch 的统计噪声更大，会导致归一化不稳定，也会让训练和推理分布差异增大。常见替代方案包括 LayerNorm、GroupNorm 或 SyncBN。",
+    "source": {
+      "title": "Batch Normalization paper",
+      "url": "https://arxiv.org/abs/1502.03167"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "mldl-auc-imbalance",
+    "title": "类别极不均衡时为什么 AUC 可能比 Accuracy 更有用？",
+    "question": "在正负样本极不均衡的二分类任务里，Accuracy、Precision/Recall、AUC 分别容易踩什么坑？",
+    "points": ["分类评估", "排序指标", "数据不均衡"],
+    "hint": "Accuracy 依赖阈值，AUC 衡量排序质量，但 AUC 也可能掩盖局部召回问题。",
+    "answer": "Accuracy 在类别不均衡时可能被多数类主导，例如全预测负类也很高。Precision/Recall 更关注正类，但依赖具体阈值。AUC 衡量随机正样本排在随机负样本前面的概率，能评价整体排序质量，不依赖单一阈值。不过当业务只关心极低 FPR 区间或 top-k 召回时，全局 AUC 也可能过于乐观，需要补充 PR-AUC、Recall@K 或局部 AUC。",
+    "source": {
+      "title": "scikit-learn model evaluation guide",
+      "url": "https://scikit-learn.org/stable/modules/model_evaluation.html"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "mldl-vanishing-gradient",
+    "title": "梯度消失为什么会发生？",
+    "question": "从链式法则解释深层网络中的梯度消失/爆炸，并说明 ReLU、残差连接和归一化各自缓解了什么问题。",
+    "points": ["反向传播", "初始化", "残差网络"],
+    "hint": "把反向传播看成很多 Jacobian 矩阵连乘。",
+    "answer": "深层网络反向传播时，梯度要经过多层导数连乘。如果每层导数范数普遍小于 1，梯度会指数级衰减；大于 1 则可能爆炸。ReLU 在正区间导数为 1，缓解 sigmoid/tanh 饱和导致的梯度变小；残差连接提供近似恒等路径，让梯度可直接回传；归一化稳定激活分布，使训练更容易保持在可优化区间。",
+    "source": {
+      "title": "Deep Residual Learning for Image Recognition",
+      "url": "https://arxiv.org/abs/1512.03385"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "mldl-cross-entropy-mse",
+    "title": "分类任务为什么常用交叉熵而不是 MSE？",
+    "question": "二分类或多分类中，为什么 softmax/sigmoid + cross entropy 通常比 MSE 更适合？",
+    "points": ["损失函数", "最大似然", "梯度性质"],
+    "hint": "交叉熵来自分类分布的负对数似然，并且和 sigmoid/softmax 组合后梯度更直接。",
+    "answer": "交叉熵对应伯努利或类别分布的最大似然目标，直接鼓励真实类别概率变大。与 sigmoid/softmax 组合时，logit 的梯度形式通常是 p-y，梯度信号清晰。MSE 更适合高斯噪声回归假设；用于分类时，概率接近 0 或 1 的饱和区可能梯度更弱，优化效率较差。",
+    "source": {
+      "title": "Deep Learning book",
+      "url": "https://www.deeplearningbook.org/"
+    },
+    "zhihu_candidate": true
+  },
+  {
+    "id": "mldl-gbdt-vs-rf",
+    "title": "GBDT 和随机森林的核心差异是什么？",
+    "question": "比较 GBDT 和 Random Forest 在训练方式、偏差方差、并行性和调参重点上的差异。",
+    "points": ["集成学习", "Bagging", "Boosting"],
+    "hint": "随机森林强调独立弱相关树的平均，GBDT 强调逐步拟合残差。",
+    "answer": "随机森林是 Bagging 思路，多棵树相对独立，通过样本和特征随机性降低方差，天然容易并行。GBDT 是 Boosting 思路，树按顺序训练，每棵树拟合前面模型的残差或负梯度，主要降低偏差但更容易过拟合，需要控制学习率、树深、子采样和迭代轮数。工程上 RF 稳健，GBDT 往往在表格数据上精度更强。",
+    "source": {
+      "title": "scikit-learn ensemble guide",
+      "url": "https://scikit-learn.org/stable/modules/ensemble.html"
+    },
+    "zhihu_candidate": true
+  }
+]
