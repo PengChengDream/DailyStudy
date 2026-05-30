@@ -1,6 +1,6 @@
 {
   "month": "2026-05",
-  "refreshed_at": "2026-05-29T12:15:21.243799+00:00",
+  "refreshed_at": "2026-05-30T01:51:17.123523+00:00",
   "groups": {
     "中文 AI 科技媒体": [
       {
@@ -82,14 +82,83 @@
         "note": "腾讯混元公开技术动态。"
       }
     ],
-    "GitHub 动态候选": []
+    "GitHub 动态候选": [
+      {
+        "title": "Devinterview-io/llms-interview-questions",
+        "url": "https://github.com/Devinterview-io/llms-interview-questions",
+        "source_type": "github_topic",
+        "stars": 991,
+        "description": "🟣 LLMs interview questions and answers to help you prepare for your next machine learning and data science interview in 2026."
+      },
+      {
+        "title": "Devinterview-io/pytorch-interview-questions",
+        "url": "https://github.com/Devinterview-io/pytorch-interview-questions",
+        "source_type": "github_topic",
+        "stars": 331,
+        "description": "🟣 Pytorch interview questions and answers to help you prepare for your next machine learning and data science interview in 2026."
+      },
+      {
+        "title": "Devinterview-io/sql-interview-questions",
+        "url": "https://github.com/Devinterview-io/sql-interview-questions",
+        "source_type": "github_topic",
+        "stars": 298,
+        "description": "🟣 SQL interview questions and answers to help you prepare for your next machine learning and data science interview in 2026."
+      },
+      {
+        "title": "amitshekhariitbhu/machine-learning-interview-questions",
+        "url": "https://github.com/amitshekhariitbhu/machine-learning-interview-questions",
+        "source_type": "github_topic",
+        "stars": 206,
+        "description": "Your Cheat Sheet for Machine Learning Interview – Questions and Answers."
+      },
+      {
+        "title": "Devinterview-io/data-scientist-interview-questions",
+        "url": "https://github.com/Devinterview-io/data-scientist-interview-questions",
+        "source_type": "github_topic",
+        "stars": 200,
+        "description": "🟣 Data Scientist interview questions and answers to help you prepare for your next machine learning and data science interview in 2026."
+      },
+      {
+        "title": "masmahbubalom/InterviewQuestions",
+        "url": "https://github.com/masmahbubalom/InterviewQuestions",
+        "source_type": "github_topic",
+        "stars": 167,
+        "description": "This is a collection of DS, AI, ML, DL, NLP, Computer Vision job interview questions."
+      },
+      {
+        "title": "Devinterview-io/computer-vision-interview-questions",
+        "url": "https://github.com/Devinterview-io/computer-vision-interview-questions",
+        "source_type": "github_topic",
+        "stars": 120,
+        "description": "🟣 Computer Vision interview questions and answers to help you prepare for your next machine learning and data science interview in 2026."
+      },
+      {
+        "title": "Devinterview-io/nlp-interview-questions",
+        "url": "https://github.com/Devinterview-io/nlp-interview-questions",
+        "source_type": "github_topic",
+        "stars": 104,
+        "description": "🟣 NLP interview questions and answers to help you prepare for your next machine learning and data science interview in 2026."
+      },
+      {
+        "title": "Devinterview-io/data-engineer-interview-questions",
+        "url": "https://github.com/Devinterview-io/data-engineer-interview-questions",
+        "source_type": "github_topic",
+        "stars": 89,
+        "description": "🟣 Data Engineer interview questions and answers to help you prepare for your next machine learning and data science interview in 2026."
+      },
+      {
+        "title": "Devinterview-io/deep-learning-interview-questions",
+        "url": "https://github.com/Devinterview-io/deep-learning-interview-questions",
+        "source_type": "github_topic",
+        "stars": 72,
+        "description": "🟣 Deep Learning interview questions and answers to help you prepare for your next machine learning and data science interview in 2026."
+      }
+    ]
   },
   "notes": [
     "每月刷新只收集公开链接、标题、摘要和方向标签，不复制完整面经或题面。",
     "LeetCode 只保存题号、链接、自写摘要和解题思路，不保存完整题面。",
     "牛客、Glassdoor、Reddit、LeetCode Discuss 等内容只作为选题线索，入库题目必须改写。"
   ],
-  "errors": [
-    "GitHub topic fetch failed: <urlopen error [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。>"
-  ]
+  "errors": []
 }

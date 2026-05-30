@@ -1,8 +1,8 @@
 # 2026-05 月度题库来源刷新
 
-- 刷新时间：2026-05-29T12:15:21.243799+00:00
+- 刷新时间：2026-05-30T01:51:17.123523+00:00
 - 复制/更新题库文件：无，已有文件保持不变
-- 动态抓取错误：GitHub topic fetch failed: <urlopen error [WinError 10013] 以一种访问权限不允许的方式做了一个访问套接字的尝试。>
+- 动态抓取错误：无
 
 ## 使用原则
 
@@ -42,3 +42,14 @@
 - [Tencent Hunyuan](https://www.tencent.com/en-us/articles/2202320.html)：腾讯混元公开技术动态。
 
 ### GitHub 动态候选
+
+- [Devinterview-io/llms-interview-questions](https://github.com/Devinterview-io/llms-interview-questions)：🟣 LLMs interview questions and answers to help you prepare for your next machine learning and data science interview in 2026.
+- [Devinterview-io/pytorch-interview-questions](https://github.com/Devinterview-io/pytorch-interview-questions)：🟣 Pytorch interview questions and answers to help you prepare for your next machine learning and data science interview in 2026.
+- [Devinterview-io/sql-interview-questions](https://github.com/Devinterview-io/sql-interview-questions)：🟣 SQL interview questions and answers to help you prepare for your next machine learning and data science interview in 2026.
+- [amitshekhariitbhu/machine-learning-interview-questions](https://github.com/amitshekhariitbhu/machine-learning-interview-questions)：Your Cheat Sheet for Machine Learning Interview – Questions and Answers.
+- [Devinterview-io/data-scientist-interview-questions](https://github.com/Devinterview-io/data-scientist-interview-questions)：🟣 Data Scientist interview questions and answers to help you prepare for your next machine learning and data science interview in 2026.
+- [masmahbubalom/InterviewQuestions](https://github.com/masmahbubalom/InterviewQuestions)：This is a collection of DS, AI, ML, DL, NLP, Computer Vision job interview questions.
+- [Devinterview-io/computer-vision-interview-questions](https://github.com/Devinterview-io/computer-vision-interview-questions)：🟣 Computer Vision interview questions and answers to help you prepare for your next machine learning and data science interview in 2026.
+- [Devinterview-io/nlp-interview-questions](https://github.com/Devinterview-io/nlp-interview-questions)：🟣 NLP interview questions and answers to help you prepare for your next machine learning and data science interview in 2026.
+- [Devinterview-io/data-engineer-interview-questions](https://github.com/Devinterview-io/data-engineer-interview-questions)：🟣 Data Engineer interview questions and answers to help you prepare for your next machine learning and data science interview in 2026.
+- [Devinterview-io/deep-learning-interview-questions](https://github.com/Devinterview-io/deep-learning-interview-questions)：🟣 Deep Learning interview questions and answers to help you prepare for your next machine learning and data science interview in 2026.
